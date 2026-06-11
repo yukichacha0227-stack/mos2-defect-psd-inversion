@@ -3,6 +3,9 @@ from __future__ import annotations
 import math
 from pathlib import Path
 
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
@@ -143,11 +146,11 @@ def fit(
             cfg.grad_clip_norm,
         )
         val_loss = evaluate(model, val_loader, criterion, device)
+        lr = optimizer.param_groups[0]["lr"]
         scheduler.step()
 
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
-        lr = optimizer.param_groups[0]["lr"]
         print(
             f"epoch={epoch + 1:03d}/{cfg.epochs:03d} "
             f"train_loss={train_loss:.6f} val_loss={val_loss:.6f} lr={lr:.6g}"
